@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 ভিডিও ডাউনলোডার 🔥</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: black;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Light Glow Effect */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 70%);
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        input {
+            width: 80%;
+            padding: 12px;
+            margin: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        button {
+            padding: 12px 25px;
+            font-size: 20px;
+            background: linear-gradient(45deg, #ff00ff, #ff8800);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0px 0px 15px rgba(255, 0, 255, 0.8);
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 1);
+            transform: scale(1.05);
+        }
+        
+        #preview img {
+            width: 300px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.7);
+        }
+        
+        video {
+            width: 80%;
+            margin-top: 20px;
+            display: none;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 0, 0.7);
+        }
+        
+        a {
+            display: none;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 10px 20px;
+            background: #00ff00;
+            color: black;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 ভিডিও ডাউনলোডার 🔥</h1>
+    <p>যেকোনো প্ল্যাটফর্ম থেকে ভিডিও ডাউনলোড করুন!</p>
+    <input type="text" id="videoUrl" placeholder="ভিডিও লিংক পেস্ট করুন...">
+    <button onclick="fetchVideo()">🔽 ডাউনলোড</button>
+    <div id="preview"></div>
+    <video id="videoPlayer" controls></video>
+    <a id="downloadLink" download>📥 ডাউনলোড করুন</a>
+    <script>
+        async function fetchVideo() {
+            let url = document.getElementById('videoUrl').value;
+            if (!url) { alert("দয়া করে একটি ভিডিও লিংক দিন!"); return; }
+            let apiUrl = `https://api.savetube.me/?url=${encodeURIComponent(url)}`;
+            try {
+                let response = await fetch(apiUrl);
+                let data = await response.json();
+                if (!data.download_url) { alert("এই লিংক থেকে ভিডিও ডাউনলোড সম্ভব নয়!"); return; }
+                document.getElementById('preview').innerHTML = `<img src="${data.thumbnail}" width="200"><br><b>${data.title}</b>`;
+                let videoPlayer = document.getElementById('videoPlayer');
+                videoPlayer.src = data.download_url;
+                videoPlayer.style.display = "block";
+                document.getElementById('downloadLink').href = data.download_url;
+                document.getElementById('downloadLink').style.display = "inline-block";
+            } catch (error) {
+                alert("সার্ভারে সমস্যা হয়েছে! পরে চেষ্টা করুন।");
+            }
+        }
+    </script>
+</body>
+</html>
